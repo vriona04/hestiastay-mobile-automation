@@ -1,0 +1,15 @@
+from pages.navigation_page import NavigationPage
+import time
+
+
+def test_navigation(driver):
+
+    time.sleep(5)
+
+    nav = NavigationPage(driver)
+
+    nav.go_home()
+
+    assert "Welcome back" in driver.page_source
+
+    print("NAVIGATION PASSED")

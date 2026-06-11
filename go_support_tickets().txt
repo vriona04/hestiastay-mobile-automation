@@ -1,0 +1,18 @@
+    def go_support_tickets(self):
+        self.go_home()
+
+        # Direct tap on Need Help / Raise Ticket card area
+        self.driver.execute_script(
+            "mobile: clickGesture",
+            {"x": 540, "y": 1700}
+        )
+
+        time.sleep(3)
+
+        if "Support Tickets" in self.driver.page_source:
+            self.driver.execute_script(
+                "mobile: clickGesture",
+                {"x": 820, "y": 2140}
+            )
+
+            time.sleep(3)
