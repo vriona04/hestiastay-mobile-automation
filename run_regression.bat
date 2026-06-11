@@ -11,6 +11,8 @@ tests/test_emergency_contact.py ^
 tests/test_rent_due.py ^
 tests/test_hostel_details.py ^
 tests/test_raise_ticket_e2e.py ^
+tests/test_wifi_details.py ^
+tests/test_food_menu.py ^
 --html=reports\report.html --self-contained-html
 
 pause

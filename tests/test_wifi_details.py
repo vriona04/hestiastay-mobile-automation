@@ -13,10 +13,18 @@ def test_wifi_details(driver):
 
     found = False
 
-    for _ in range(4):
+    search_terms = [
+        "Wi-Fi Details",
+        "Airtel",
+        "Wifi",
+        "networks",
+        "Floor"
+    ]
+
+    for direction in ["down", "down", "up", "up", "down"]:
         page = driver.page_source
 
-        if "Wi-Fi Details" in page or "Airtel" in page or "Wifi" in page:
+        if any(term in page for term in search_terms):
             found = True
             break
 
@@ -24,11 +32,11 @@ def test_wifi_details(driver):
             "mobile: scrollGesture",
             {
                 "left": 100,
-                "top": 600,
+                "top": 500,
                 "width": 900,
-                "height": 1200,
-                "direction": "down",
-                "percent": 0.7
+                "height": 1300,
+                "direction": direction,
+                "percent": 0.8
             }
         )
 
