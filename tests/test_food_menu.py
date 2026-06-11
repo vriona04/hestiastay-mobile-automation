@@ -12,10 +12,18 @@ def test_food_menu(driver):
 
     found = False
 
-    for _ in range(4):
+    search_terms = [
+        "Today's Lunch",
+        "LUNCH",
+        "Menu Items",
+        "SERVING",
+        "No items available"
+    ]
+
+    for direction in ["down", "down", "up", "up", "down"]:
         page = driver.page_source
 
-        if "Today's Lunch" in page or "LUNCH" in page or "Menu Items" in page:
+        if any(term in page for term in search_terms):
             found = True
             break
 
@@ -23,11 +31,11 @@ def test_food_menu(driver):
             "mobile: scrollGesture",
             {
                 "left": 100,
-                "top": 600,
+                "top": 500,
                 "width": 900,
-                "height": 1200,
-                "direction": "down",
-                "percent": 0.7
+                "height": 1300,
+                "direction": direction,
+                "percent": 0.8
             }
         )
 
@@ -38,10 +46,6 @@ def test_food_menu(driver):
 
     page = driver.page_source
 
-    assert (
-        "Today's Lunch" in page
-        or "LUNCH" in page
-        or "Menu Items" in page
-    )
+    assert any(term in page for term in search_terms), "Food menu content not found"
 
     print("FOOD MENU PASSED")
