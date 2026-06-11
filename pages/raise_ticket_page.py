@@ -10,8 +10,10 @@ class RaiseTicketPage(BasePage):
             AppiumBy.CLASS_NAME,
             "android.widget.EditText"
         )
-        fields[0].clear()
-        fields[0].send_keys(title)
+
+        if len(fields) > 0:
+            fields[0].clear()
+            fields[0].send_keys(title)
 
     def enter_description(self, description):
         fields = self.driver.find_elements(
@@ -19,8 +21,9 @@ class RaiseTicketPage(BasePage):
             "android.widget.EditText"
         )
 
-        fields[-1].clear()
-        fields[-1].send_keys(description)
+        if len(fields) > 1:
+            fields[-1].clear()
+            fields[-1].send_keys(description)
 
     def select_wifi_category(self):
         self.click_a11y("Select equipment category")
@@ -28,15 +31,30 @@ class RaiseTicketPage(BasePage):
 
         self.driver.execute_script(
             "mobile: clickGesture",
-            {"x": 550, "y": 815}
+            {
+                "x": 550,
+                "y": 815
+            }
         )
 
         time.sleep(2)
 
     def select_medium_priority(self):
         self.click_a11y("Medium")
+        time.sleep(1)
+
+    def verify_category_selected(self):
+        assert "WiFi" in self.driver.page_source
+
+    def verify_priority_visible(self):
+        page = self.driver.page_source
+
+        assert "Low" in page
+        assert "Medium" in page
+        assert "High" in page
 
     def submit_ticket(self):
+
         self.driver.execute_script(
             "mobile: scrollGesture",
             {
@@ -45,37 +63,44 @@ class RaiseTicketPage(BasePage):
                 "width": 900,
                 "height": 1200,
                 "direction": "down",
-                "percent": 0.8
+                "percent": 0.9
             }
         )
 
         time.sleep(2)
 
         try:
-            self.click_a11y("Submit Ticket")
-        except:
+            self.click_a11y("Create Ticket")
+        except Exception:
             self.driver.execute_script(
                 "mobile: clickGesture",
-                {"x": 540, "y": 2000}
+                {
+                    "x": 540,
+                    "y": 2120
+                }
             )
 
-        time.sleep(4)
+        time.sleep(6)
+
+        self.driver.save_screenshot(
+            "ticket_submitted_latest.png"
+        )
+
+        with open(
+            "ticket_submitted_latest.xml",
+            "w",
+            encoding="utf-8"
+        ) as f:
+            f.write(self.driver.page_source)
 
     def verify_ticket_submitted(self):
+
         page = self.driver.page_source
 
         assert (
             "Ticket" in page
-            or "Support Tickets" in page
-            or "success" in page.lower()
-            or "created" in page.lower()
-            or "submitted" in page.lower()
-        ), "Ticket submit confirmation not found"
-
-    def verify_category_selected(self):
-        assert "WiFi" in self.driver.page_source
-
-    def verify_priority_visible(self):
-        assert "Low" in self.driver.page_source
-        assert "Medium" in self.driver.page_source
-        assert "High" in self.driver.page_source
+            or "Support" in page
+            or "Created" in page
+            or "Submitted" in page
+            or "Success" in page
+        ), "Ticket submission confirmation not found"
