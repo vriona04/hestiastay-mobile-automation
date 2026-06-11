@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+
+screenshots/
+reports/
+
+*.png
+*.xml
+
+profile.png
+profile.xml
+profile_bottom.png
+profile_bottom.xml
+
+*.log
+.env
