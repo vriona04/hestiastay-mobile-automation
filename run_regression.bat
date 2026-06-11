@@ -10,6 +10,7 @@ tests/test_edit_profile.py ^
 tests/test_emergency_contact.py ^
 tests/test_rent_due.py ^
 tests/test_hostel_details.py ^
+tests/test_raise_ticket_e2e.py ^
 --html=reports\report.html --self-contained-html
 
 pause
