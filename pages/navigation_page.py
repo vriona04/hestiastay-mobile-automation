@@ -11,38 +11,71 @@ class NavigationPage(BasePage):
             if "Welcome back" in page:
                 return
 
-            if "Back" in page:
-                try:
-                    self.click_a11y("Back")
-                except:
-                    self.driver.back()
-            else:
+            try:
                 self.driver.back()
+            except Exception:
+                pass
 
             time.sleep(1)
 
     def go_bookings(self):
         self.go_home()
-        self.click_a11y("Bookings")
+
+        try:
+            self.click_a11y("Bookings")
+        except Exception:
+            self.driver.execute_script(
+                "mobile: clickGesture",
+                {"x": 280, "y": 2160}
+            )
+
         time.sleep(2)
 
     def go_profile(self):
         self.go_home()
-        self.click_a11y("Profile")
+
+        try:
+            self.click_a11y("Profile")
+        except Exception:
+            self.driver.execute_script(
+                "mobile: clickGesture",
+                {"x": 900, "y": 2160}
+            )
+
         time.sleep(2)
 
     def go_leave(self):
         self.go_home()
 
         try:
+            self.driver.execute_script(
+                "mobile: scrollGesture",
+                {
+                    "left": 100,
+                    "top": 600,
+                    "width": 900,
+                    "height": 1200,
+                    "direction": "down",
+                    "percent": 0.6
+                }
+            )
+        except Exception:
+            pass
+
+        time.sleep(2)
+
+        try:
             self.click_a11y(
                 "Going on Leave?\nLet your hostel know when you'll be away"
             )
-        except:
-            self.driver.execute_script(
-                "mobile: clickGesture",
-                {"x": 540, "y": 1180}
-            )
+        except Exception:
+            try:
+                self.click_a11y("Going on Leave?")
+            except Exception:
+                self.driver.execute_script(
+                    "mobile: clickGesture",
+                    {"x": 540, "y": 1500}
+                )
 
         time.sleep(3)
 
@@ -97,7 +130,7 @@ class NavigationPage(BasePage):
 
         try:
             self.click_a11y("View Details")
-        except:
+        except Exception:
             self.driver.execute_script(
                 "mobile: clickGesture",
                 {"x": 540, "y": 800}

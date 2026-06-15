@@ -13,9 +13,6 @@ def test_leave_screen(driver):
 
     page = driver.page_source
 
-    if "Raise Ticket" in page:
-        pytest.skip("Leave navigation opened Support Ticket screen")
-
     if (
         "Leave" not in page
         and "Save Menu" not in page
