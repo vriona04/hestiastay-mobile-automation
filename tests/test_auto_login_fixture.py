@@ -1,3 +1,7 @@
+import pytest
+
+
+@pytest.mark.auth
 def test_auto_login_fixture(logged_in_driver):
     page = logged_in_driver.page_source
 

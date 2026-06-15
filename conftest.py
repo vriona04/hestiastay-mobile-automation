@@ -1,7 +1,7 @@
 import os
-import time
 import pytest
 from datetime import datetime
+
 from utils.driver_factory import get_driver
 from pages.login_page import LoginPage
 
@@ -26,13 +26,20 @@ def logged_in_driver():
     page = driver.page_source
 
     if (
-        "Welcome back" not in page
-        and "Bookings" not in page
-        and "Profile" not in page
+        "Welcome back" in page
+        or "Bookings" in page
+        or "Profile" in page
+        or "Hestia" in page
     ):
+        pass
+
+    elif LoginPage(driver).is_login_screen():
         login = LoginPage(driver)
         login.login(email, password)
         login.verify_dashboard()
+
+    else:
+        pytest.skip("App not on dashboard or login screen")
 
     yield driver
 

@@ -5,15 +5,38 @@ from utils.base_page import BasePage
 
 class LoginPage(BasePage):
 
+    def is_login_screen(self):
+        page = self.driver.page_source
+        fields = self.driver.find_elements(
+            AppiumBy.CLASS_NAME,
+            "android.widget.EditText"
+        )
+
+        return (
+            len(fields) >= 2
+            or "Welcome Back" in page
+            or "Email" in page
+            or "Password" in page
+            or "Sign In" in page
+            or "Login" in page
+        )
+
     def login(self, email, password):
-        time.sleep(3)
+        time.sleep(5)
 
         fields = self.driver.find_elements(
             AppiumBy.CLASS_NAME,
             "android.widget.EditText"
         )
 
-        assert len(fields) >= 2, "Email and password fields not found"
+        if len(fields) < 2:
+            self.driver.save_screenshot("login_debug.png")
+            with open("login_debug.xml", "w", encoding="utf-8") as f:
+                f.write(self.driver.page_source)
+
+            raise AssertionError(
+                "Email and password fields not found. Saved login_debug.xml"
+            )
 
         fields[0].click()
         fields[0].clear()

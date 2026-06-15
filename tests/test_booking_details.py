@@ -3,7 +3,8 @@ from pages.booking_details_page import BookingDetailsPage
 import time
 
 
-def test_booking_details(driver):
+def test_booking_details(logged_in_driver):
+    driver = logged_in_driver
     time.sleep(5)
 
     nav = NavigationPage(driver)

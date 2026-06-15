@@ -1,7 +1,9 @@
 import time
+import pytest
 from pages.navigation_page import NavigationPage
 
 
+@pytest.mark.auth
 def test_logout(driver):
 
     time.sleep(5)
@@ -17,7 +19,7 @@ def test_logout(driver):
 
     page = driver.page_source
 
-    # If logout is not visible, try opening profile/bottom menu fallback
+    # If logout is not visible, try profile fallback
     if "Logout" not in page:
         driver.execute_script(
             "mobile: clickGesture",
@@ -25,7 +27,7 @@ def test_logout(driver):
         )
         time.sleep(2)
 
-    # Tap logout menu item by text or coordinates
+    # Tap logout menu item
     try:
         nav.click_a11y("Logout\nSign out of your account")
     except Exception:
@@ -51,13 +53,13 @@ def test_logout(driver):
     time.sleep(5)
 
     page = driver.page_source
-    print(page[:5000])
 
     assert (
         "Sign In" in page
         or "Login" in page
         or "Email" in page
         or "Password" in page
+        or "Welcome Back" in page
     )
 
     print("LOGOUT PASSED")

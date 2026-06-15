@@ -1,15 +1,21 @@
 import os
 import time
+import pytest
 from pages.login_page import LoginPage
 
 
+@pytest.mark.auth
 def test_invalid_login_wrong_password(driver):
     login = LoginPage(driver)
 
     email = os.getenv("HESTIA_EMAIL")
     assert email, "HESTIA_EMAIL environment variable not set"
 
+    assert login.is_login_screen(), "App is not on login screen. Logout first."
+
     login.login(email, "WrongPassword@123")
+
+    time.sleep(3)
 
     page = driver.page_source
 
@@ -22,8 +28,11 @@ def test_invalid_login_wrong_password(driver):
     print("INVALID LOGIN WRONG PASSWORD PASSED")
 
 
+@pytest.mark.auth
 def test_invalid_login_empty_fields(driver):
     login = LoginPage(driver)
+
+    assert login.is_login_screen(), "App is not on login screen. Logout first."
 
     login.login("", "")
 

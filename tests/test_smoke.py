@@ -1,32 +1,25 @@
-from pages.navigation_page import NavigationPage
 from pages.home_page import HomePage
 from pages.bookings_page import BookingsPage
 from pages.profile_page import ProfilePage
-import time
 
 
-def test_smoke(driver):
-    time.sleep(5)
+def test_smoke(logged_in_driver):
+    driver = logged_in_driver
 
-    nav = NavigationPage(driver)
     home = HomePage(driver)
     bookings = BookingsPage(driver)
     profile = ProfilePage(driver)
-
-    nav.go_home()
 
     print("Verifying Dashboard")
     home.verify_dashboard()
 
     print("Opening Bookings")
-    nav.go_bookings()
+    home.open_bookings()
     bookings.verify()
     bookings.back()
 
-    time.sleep(2)
-
     print("Opening Profile")
-    nav.go_profile()
+    home.open_profile()
     profile.verify()
     profile.back()
 

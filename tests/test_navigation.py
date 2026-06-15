@@ -2,7 +2,8 @@ from pages.navigation_page import NavigationPage
 import time
 
 
-def test_navigation(driver):
+def test_navigation(logged_in_driver):
+    driver = logged_in_driver
 
     time.sleep(5)
 
