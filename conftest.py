@@ -1,13 +1,41 @@
 import os
+import time
 import pytest
 from datetime import datetime
 from utils.driver_factory import get_driver
+from pages.login_page import LoginPage
 
 
 @pytest.fixture
 def driver():
     driver = get_driver()
     yield driver
+    driver.quit()
+
+
+@pytest.fixture
+def logged_in_driver():
+    driver = get_driver()
+
+    email = os.getenv("HESTIA_EMAIL")
+    password = os.getenv("HESTIA_PASSWORD")
+
+    assert email, "HESTIA_EMAIL environment variable not set"
+    assert password, "HESTIA_PASSWORD environment variable not set"
+
+    page = driver.page_source
+
+    if (
+        "Welcome back" not in page
+        and "Bookings" not in page
+        and "Profile" not in page
+    ):
+        login = LoginPage(driver)
+        login.login(email, password)
+        login.verify_dashboard()
+
+    yield driver
+
     driver.quit()
 
 
@@ -19,7 +47,10 @@ def pytest_runtest_makereport(item, call):
 
     if report.when == "call" and report.failed:
 
-        driver = item.funcargs.get("driver")
+        driver = (
+            item.funcargs.get("driver")
+            or item.funcargs.get("logged_in_driver")
+        )
 
         if driver:
 
