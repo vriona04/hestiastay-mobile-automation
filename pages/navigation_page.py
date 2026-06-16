@@ -103,14 +103,6 @@ class NavigationPage(BasePage):
 
         time.sleep(3)
 
-        if "Support Tickets" in self.driver.page_source:
-            self.driver.execute_script(
-                "mobile: clickGesture",
-                {"x": 820, "y": 2160}
-            )
-
-            time.sleep(3)
-
     def go_payment(self):
         self.go_home()
 
@@ -134,6 +126,27 @@ class NavigationPage(BasePage):
             self.driver.execute_script(
                 "mobile: clickGesture",
                 {"x": 540, "y": 800}
+            )
+
+        time.sleep(3)
+
+    def go_vacate(self):
+        self.go_home()
+
+        # Open drawer/menu from top-right button
+        self.driver.execute_script(
+            "mobile: clickGesture",
+            {"x": 1010, "y": 175}
+        )
+
+        time.sleep(2)
+
+        try:
+            self.click_a11y("Vacate\nVacate hostel room")
+        except Exception:
+            self.driver.execute_script(
+                "mobile: clickGesture",
+                {"x": 450, "y": 1400}
             )
 
         time.sleep(3)
