@@ -5,7 +5,7 @@ import time
 class NavigationPage(BasePage):
 
     def go_home(self):
-        for _ in range(8):
+        for _ in range(10):
             page = self.driver.page_source
 
             if "Welcome back" in page:
@@ -13,10 +13,25 @@ class NavigationPage(BasePage):
 
             try:
                 self.driver.back()
+                time.sleep(1)
             except Exception:
                 pass
 
-            time.sleep(1)
+            page = self.driver.page_source
+
+            if "Welcome back" in page:
+                return
+
+            try:
+                self.driver.execute_script(
+                    "mobile: clickGesture",
+                    {"x": 70, "y": 170}
+                )
+                time.sleep(1)
+            except Exception:
+                pass
+
+        raise Exception("Home screen not reached")
 
     def go_bookings(self):
         self.go_home()
@@ -47,6 +62,46 @@ class NavigationPage(BasePage):
     def go_leave(self):
         self.go_home()
 
+        for _ in range(5):
+
+            page = self.driver.page_source
+
+            if "Going on Leave?" in page:
+                try:
+                    self.click_a11y(
+                        "Going on Leave?\nLet your hostel know when you'll be away"
+                    )
+                except Exception:
+                    try:
+                        self.click_a11y("Going on Leave?")
+                    except Exception:
+                        pass
+
+                time.sleep(3)
+                return
+
+            try:
+                self.driver.execute_script(
+                    "mobile: scrollGesture",
+                    {
+                        "left": 100,
+                        "top": 600,
+                        "width": 900,
+                        "height": 1200,
+                        "direction": "down",
+                        "percent": 0.5
+                    }
+                )
+            except Exception:
+                pass
+
+            time.sleep(2)
+
+        raise Exception("Leave card not found")
+
+    def go_support_tickets(self):
+        self.go_home()
+
         try:
             self.driver.execute_script(
                 "mobile: scrollGesture",
@@ -56,7 +111,7 @@ class NavigationPage(BasePage):
                     "width": 900,
                     "height": 1200,
                     "direction": "down",
-                    "percent": 0.6
+                    "percent": 0.9
                 }
             )
         except Exception:
@@ -65,58 +120,32 @@ class NavigationPage(BasePage):
         time.sleep(2)
 
         try:
-            self.click_a11y(
-                "Going on Leave?\nLet your hostel know when you'll be away"
+            self.driver.execute_script(
+                "mobile: clickGesture",
+                {"x": 540, "y": 1650}
             )
         except Exception:
-            try:
-                self.click_a11y("Going on Leave?")
-            except Exception:
-                self.driver.execute_script(
-                    "mobile: clickGesture",
-                    {"x": 540, "y": 1500}
-                )
-
-        time.sleep(3)
-
-    def go_support_tickets(self):
-        self.go_home()
-
-        self.driver.execute_script(
-            "mobile: scrollGesture",
-            {
-                "left": 100,
-                "top": 600,
-                "width": 900,
-                "height": 1200,
-                "direction": "down",
-                "percent": 0.9
-            }
-        )
-
-        time.sleep(2)
-
-        self.driver.execute_script(
-            "mobile: clickGesture",
-            {"x": 540, "y": 1650}
-        )
+            pass
 
         time.sleep(3)
 
     def go_payment(self):
         self.go_home()
 
-        self.driver.execute_script(
-            "mobile: scrollGesture",
-            {
-                "left": 100,
-                "top": 600,
-                "width": 900,
-                "height": 1200,
-                "direction": "down",
-                "percent": 0.9
-            }
-        )
+        try:
+            self.driver.execute_script(
+                "mobile: scrollGesture",
+                {
+                    "left": 100,
+                    "top": 600,
+                    "width": 900,
+                    "height": 1200,
+                    "direction": "down",
+                    "percent": 0.9
+                }
+            )
+        except Exception:
+            pass
 
         time.sleep(2)
 
@@ -133,20 +162,25 @@ class NavigationPage(BasePage):
     def go_vacate(self):
         self.go_home()
 
-        # Open drawer/menu from top-right button
-        self.driver.execute_script(
-            "mobile: clickGesture",
-            {"x": 1010, "y": 175}
-        )
+        try:
+            self.driver.execute_script(
+                "mobile: clickGesture",
+                {"x": 1010, "y": 175}
+            )
+        except Exception:
+            pass
 
         time.sleep(2)
 
         try:
             self.click_a11y("Vacate\nVacate hostel room")
         except Exception:
-            self.driver.execute_script(
-                "mobile: clickGesture",
-                {"x": 450, "y": 1400}
-            )
+            try:
+                self.driver.execute_script(
+                    "mobile: clickGesture",
+                    {"x": 450, "y": 1400}
+                )
+            except Exception:
+                pass
 
         time.sleep(3)
