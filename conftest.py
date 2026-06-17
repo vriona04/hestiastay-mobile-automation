@@ -1,4 +1,5 @@
 import os
+import time
 import pytest
 from datetime import datetime
 
@@ -9,41 +10,66 @@ from pages.login_page import LoginPage
 @pytest.fixture
 def driver():
     driver = get_driver()
+    time.sleep(5)
+
     yield driver
-    driver.quit()
+
+    try:
+        driver.quit()
+    except Exception:
+        pass
 
 
 @pytest.fixture
 def logged_in_driver():
     driver = get_driver()
+    time.sleep(5)
 
-    email = os.getenv("HESTIA_EMAIL")
-    password = os.getenv("HESTIA_PASSWORD")
+    try:
+        page = driver.page_source
+    except Exception:
+        pytest.skip("Unable to read app screen - Appium/UIAutomator2 not ready")
 
-    assert email, "HESTIA_EMAIL environment variable not set"
-    assert password, "HESTIA_PASSWORD environment variable not set"
-
-    page = driver.page_source
-
+    # Already logged in / already on app screen
     if (
         "Welcome back" in page
         or "Bookings" in page
         or "Profile" in page
         or "Hestia" in page
+        or "Wi-Fi Details" in page
     ):
-        pass
+        yield driver
 
-    elif LoginPage(driver).is_login_screen():
-        login = LoginPage(driver)
+        try:
+            driver.quit()
+        except Exception:
+            pass
+
+        return
+
+    # Only require credentials if app is on login screen
+    login = LoginPage(driver)
+
+    if login.is_login_screen():
+        email = os.getenv("HESTIA_EMAIL")
+        password = os.getenv("HESTIA_PASSWORD")
+
+        assert email, "HESTIA_EMAIL environment variable not set"
+        assert password, "HESTIA_PASSWORD environment variable not set"
+
         login.login(email, password)
         login.verify_dashboard()
 
-    else:
-        pytest.skip("App not on dashboard or login screen")
+        yield driver
 
-    yield driver
+        try:
+            driver.quit()
+        except Exception:
+            pass
 
-    driver.quit()
+        return
+
+    pytest.skip("App not on dashboard or login screen")
 
 
 @pytest.hookimpl(hookwrapper=True)
