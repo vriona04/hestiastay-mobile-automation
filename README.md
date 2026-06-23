@@ -2,55 +2,109 @@
 
 ## Overview
 
-Mobile automation framework for the HestiaStay Android application built using:
+A robust mobile automation framework for the HestiaStay Android application built using Python, Appium, and Pytest following the Page Object Model (POM) design pattern.
 
-* Python
-* Appium
+## Tech Stack
+
+* Python 3.12
+* Appium 3.5
 * Pytest
-* Page Object Model (POM)
+* UiAutomator2
+* Android Real Device Testing
+* Git & GitHub
 
-## Features
+## Key Features
 
-* Automated Android testing
+* Android mobile automation
 * Real device execution
 * USB and Wireless ADB support
+* Page Object Model (POM) architecture
+* Stable regression suite
+* End-to-End business flow automation
 * HTML reporting
 * Screenshot capture on failures
 * XML page source dumps for debugging
-* Stable regression suite
-* End-to-end workflow automation
+* Reusable utility components
 
-## Automated Test Coverage
+## Test Coverage
 
 ### Core Regression Suite
 
 * Smoke Test
 * Navigation Test
 * Booking Details
+* Food Menu
+* Rent Due
+* Wi-Fi Details
+* Hostel Details
 * Payment History
 * Profile Details
 * Edit Profile
 * Emergency Contact
-* Rent Due
-* Hostel Details
-* Wi-Fi Details
-* Food Menu
+* Support Tickets
 
 ### End-to-End Business Flows
 
-* Support Ticket Navigation
+* Leave Flow
+* Raise Ticket Form
 * Raise Ticket End-to-End
+* Vacate Form
+* Vacate Requests
 
-## Latest Regression Result
+## Latest Regression Results
 
 | Metric      | Result |
 | ----------- | ------ |
-| Total Tests | 12     |
-| Passed      | 12     |
+| Total Tests | 16+    |
+| Passed      | 16     |
 | Failed      | 0      |
 | Skipped     | 0      |
 
-Execution Time: ~3 Minutes
+Execution Time: ~5 Minutes
+
+## Project Structure
+
+```text
+hestiastay_automation/
+│
+├── pages/
+├── tests/
+├── utils/
+├── reports/
+├── screenshots/
+├── conftest.py
+├── pytest.ini
+├── requirements.txt
+├── run_regression.bat
+└── README.md
+```
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/vriona04/hestiastay-mobile-automation.git
+cd hestiastay-mobile-automation
+```
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Start Appium server:
+
+```bash
+appium
+```
+
+Connect Android device and verify:
+
+```bash
+adb devices
+```
 
 ## Execute Regression Suite
 
@@ -60,56 +114,20 @@ Execution Time: ~3 Minutes
 
 ## Reports
 
-HTML reports are generated automatically in:
+HTML reports are automatically generated under:
 
 ```text
-reports/report.html
+reports/
 ```
 
-## Framework Structure
+## Framework Highlights
 
-```text
-hestiastay_automation/
-│
-├── pages/
-│   ├── home_page.py
-│   ├── navigation_page.py
-│   ├── bookings_page.py
-│   ├── profile_page.py
-│   ├── rent_page.py
-│   ├── wifi_page.py
-│   └── raise_ticket_page.py
-│
-├── tests/
-│   ├── test_smoke.py
-│   ├── test_navigation.py
-│   ├── test_booking_details.py
-│   ├── test_payment_history.py
-│   ├── test_profile_details.py
-│   ├── test_edit_profile.py
-│   ├── test_emergency_contact.py
-│   ├── test_rent_due.py
-│   ├── test_hostel_details.py
-│   ├── test_wifi_details.py
-│   ├── test_food_menu.py
-│   └── test_raise_ticket_e2e.py
-│
-├── utils/
-├── reports/
-├── screenshots/
-├── conftest.py
-├── run_regression.bat
-└── README.md
-```
-
-## Technology Stack
-
-* Python 3.12
-* Appium 3.5
-* Pytest
-* UiAutomator2
-* Android Real Device Testing
-* Git & GitHub
+* Page Object Model Architecture
+* Reusable Navigation Framework
+* Stable Regression Execution
+* Real Device Testing
+* Detailed HTML Reports
+* Automatic Failure Evidence Collection
 
 ## Project Status
 
@@ -124,7 +142,5 @@ hestiastay_automation/
 ✅ GitHub Version Control
 
 ## Repository
-
-GitHub Repository:
 
 https://github.com/vriona04/hestiastay-mobile-automation
