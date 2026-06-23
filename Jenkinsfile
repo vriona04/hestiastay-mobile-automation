@@ -10,6 +10,7 @@ pipeline {
             steps {
                 bat '''
                 if not exist reports mkdir reports
+                if not exist screenshots mkdir screenshots
 
                 "C:\\Program Files\\Python312\\python.exe" -m pytest -v -s ^
                 tests/test_auto_login_fixture.py ^
