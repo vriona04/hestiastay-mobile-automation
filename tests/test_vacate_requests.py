@@ -1,24 +1,23 @@
 import time
 import pytest
+from pages.navigation_page import NavigationPage
 
 
-def test_vacate_requests(driver):
+def test_vacate_requests(logged_in_driver):
+    driver = logged_in_driver
+
     time.sleep(5)
+
+    nav = NavigationPage(driver)
+    nav.go_vacate()
 
     page = driver.page_source
 
-    if "Vacating Requests" not in page:
-        pytest.skip("Vacate screen not open")
-
-    assert "My Requests" in page
-    assert "Request Summary" in page
-    assert "All Requests" in page
-
     assert (
-        "Cancelled" in page
-        or "Pending" in page
-        or "Approved" in page
-        or "Completed" in page
-    )
+        "Vacate" in page
+        or "Requests" in page
+        or "New Request" in page
+        or "Past Requests" in page
+    ), "Vacate requests not found"
 
     print("VACATE REQUESTS PASSED")

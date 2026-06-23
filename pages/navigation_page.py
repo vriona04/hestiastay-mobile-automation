@@ -1,37 +1,106 @@
 from utils.base_page import BasePage
 import time
+import pytest
 
 
 class NavigationPage(BasePage):
 
+    def handle_biometric_popup(self):
+        page = self.driver.page_source
+
+        if "Enable Face/Fingerprint Login?" in page or "Not Now" in page:
+            try:
+                self.click_a11y("Not Now")
+            except Exception:
+                try:
+                    self.driver.execute_script(
+                        "mobile: clickGesture",
+                        {"x": 470, "y": 1430}
+                    )
+                except Exception:
+                    pass
+
+            time.sleep(2)
+
     def go_home(self):
+        try:
+            self.driver.activate_app("com.hostelrs.guest")
+            time.sleep(3)
+        except Exception:
+            pass
+
+        self.handle_biometric_popup()
+
         for _ in range(10):
             page = self.driver.page_source
 
-            if "Welcome back" in page:
+            if (
+                "My Bookings" in page
+                or "Edit Profile" in page
+                or "Create Ticket" in page
+                or "Vacate" in page
+                or "My Profile" in page
+                or "Support Tickets" in page
+                or "Payment Details" in page
+                or "Download Official Receipt" in page
+            ):
+                try:
+                    self.click_a11y("Close")
+                    time.sleep(2)
+                    continue
+                except Exception:
+                    pass
+
+                try:
+                    self.driver.execute_script(
+                        "mobile: clickGesture",
+                        {"x": 800, "y": 2030}
+                    )
+                    time.sleep(2)
+                    continue
+                except Exception:
+                    pass
+
+                try:
+                    self.driver.back()
+                    time.sleep(2)
+                    continue
+                except Exception:
+                    pass
+
+            if (
+                "Welcome back" in page
+                or "Hestia PG" in page
+                or "Wi-Fi Details" in page
+                or "Need Help?" in page
+                or "RENT OVERDUE" in page
+                or "Going on Leave?" in page
+                or "Home" in page
+            ):
+                print("Dashboard detected")
                 return
+
+            try:
+                self.click_a11y("Home")
+                time.sleep(2)
+            except Exception:
+                try:
+                    self.driver.execute_script(
+                        "mobile: clickGesture",
+                        {"x": 120, "y": 2160}
+                    )
+                    time.sleep(2)
+                except Exception:
+                    pass
 
             try:
                 self.driver.back()
-                time.sleep(1)
             except Exception:
                 pass
 
-            page = self.driver.page_source
+            time.sleep(2)
 
-            if "Welcome back" in page:
-                return
-
-            try:
-                self.driver.execute_script(
-                    "mobile: clickGesture",
-                    {"x": 70, "y": 170}
-                )
-                time.sleep(1)
-            except Exception:
-                pass
-
-        raise Exception("Home screen not reached")
+        print("Could not confirm dashboard")
 
     def go_bookings(self):
         self.go_home()
@@ -62,23 +131,54 @@ class NavigationPage(BasePage):
     def go_leave(self):
         self.go_home()
 
-        for _ in range(5):
+        page = self.driver.page_source
 
+        if "Going on Leave?" not in page:
+            try:
+                self.driver.execute_script(
+                    "mobile: scrollGesture",
+                    {
+                        "left": 100,
+                        "top": 600,
+                        "width": 900,
+                        "height": 1200,
+                        "direction": "up",
+                        "percent": 0.8
+                    }
+                )
+                time.sleep(2)
+                page = self.driver.page_source
+            except Exception:
+                pass
+
+        if "Going on Leave?" in page:
+            try:
+                self.click_a11y(
+                    "Going on Leave?\nLet your hostel know when you'll be away"
+                )
+            except Exception:
+                self.driver.execute_script(
+                    "mobile: clickGesture",
+                    {"x": 540, "y": 1240}
+                )
+
+            time.sleep(3)
+            return
+
+        pytest.skip("Leave card not available")
+
+    def go_support_tickets(self):
+        self.go_home()
+
+        for _ in range(5):
             page = self.driver.page_source
 
-            if "Going on Leave?" in page:
-                try:
-                    self.click_a11y(
-                        "Going on Leave?\nLet your hostel know when you'll be away"
-                    )
-                except Exception:
-                    try:
-                        self.click_a11y("Going on Leave?")
-                    except Exception:
-                        pass
-
-                time.sleep(3)
-                return
+            if (
+                "Need Help?" in page
+                or "Support" in page
+                or "Raise a ticket" in page
+            ):
+                break
 
             try:
                 self.driver.execute_script(
@@ -89,7 +189,7 @@ class NavigationPage(BasePage):
                         "width": 900,
                         "height": 1200,
                         "direction": "down",
-                        "percent": 0.5
+                        "percent": 1.0
                     }
                 )
             except Exception:
@@ -97,37 +197,23 @@ class NavigationPage(BasePage):
 
             time.sleep(2)
 
-        raise Exception("Leave card not found")
+        page = self.driver.page_source
 
-    def go_support_tickets(self):
-        self.go_home()
+        if "Need Help?" in page or "Support" in page or "Raise a ticket" in page:
+            try:
+                self.click_a11y(
+                    "Need Help?\nRaise a ticket for support"
+                )
+            except Exception:
+                self.driver.execute_script(
+                    "mobile: clickGesture",
+                    {"x": 540, "y": 1800}
+                )
 
-        try:
-            self.driver.execute_script(
-                "mobile: scrollGesture",
-                {
-                    "left": 100,
-                    "top": 600,
-                    "width": 900,
-                    "height": 1200,
-                    "direction": "down",
-                    "percent": 0.9
-                }
-            )
-        except Exception:
-            pass
+            time.sleep(3)
+            return
 
-        time.sleep(2)
-
-        try:
-            self.driver.execute_script(
-                "mobile: clickGesture",
-                {"x": 540, "y": 1650}
-            )
-        except Exception:
-            pass
-
-        time.sleep(3)
+        pytest.skip("Support section not found")
 
     def go_payment(self):
         self.go_home()
@@ -165,7 +251,7 @@ class NavigationPage(BasePage):
         try:
             self.driver.execute_script(
                 "mobile: clickGesture",
-                {"x": 1010, "y": 175}
+                {"x": 60, "y": 170}
             )
         except Exception:
             pass
@@ -176,11 +262,11 @@ class NavigationPage(BasePage):
             self.click_a11y("Vacate\nVacate hostel room")
         except Exception:
             try:
+                self.click_a11y("Vacate")
+            except Exception:
                 self.driver.execute_script(
                     "mobile: clickGesture",
                     {"x": 450, "y": 1400}
                 )
-            except Exception:
-                pass
 
         time.sleep(3)

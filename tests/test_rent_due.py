@@ -4,6 +4,7 @@ import pytest
 import time
 
 
+@pytest.mark.stable
 def test_rent_due_screen(driver):
 
     time.sleep(5)

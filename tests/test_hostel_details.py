@@ -1,4 +1,5 @@
 import time
+import pytest
 from pages.navigation_page import NavigationPage
 from pages.hostel_page import HostelPage
 

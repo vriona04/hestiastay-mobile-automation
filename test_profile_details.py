@@ -1,5 +1,4 @@
 import time
-import pytest
 from pages.navigation_page import NavigationPage
 from pages.profile_details_page import ProfileDetailsPage
 

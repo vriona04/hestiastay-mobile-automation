@@ -10,42 +10,50 @@ def test_food_menu(driver):
     nav.go_home()
     time.sleep(2)
 
-    found = False
-
     search_terms = [
-        "Today's Lunch",
+        "BREAKFAST",
         "LUNCH",
+        "DINNER",
+        "Today's Breakfast",
+        "Today's Lunch",
+        "Today's Dinner",
         "Menu Items",
-        "SERVING",
-        "No items available"
+        "No items available",
+        "Updated by",
+        "NOW",
+        "UPCOMING",
     ]
 
-    for direction in ["down", "down", "up", "up", "down"]:
+    found = False
+
+    for direction in ["up", "up", "down", "down", "down", "up"]:
         page = driver.page_source
 
         if any(term in page for term in search_terms):
             found = True
             break
 
-        driver.execute_script(
-            "mobile: scrollGesture",
-            {
-                "left": 100,
-                "top": 500,
-                "width": 900,
-                "height": 1300,
-                "direction": direction,
-                "percent": 0.8
-            }
-        )
+        try:
+            driver.execute_script(
+                "mobile: scrollGesture",
+                {
+                    "left": 100,
+                    "top": 500,
+                    "width": 900,
+                    "height": 1300,
+                    "direction": direction,
+                    "percent": 0.9,
+                },
+            )
+        except Exception:
+            pass
 
         time.sleep(2)
 
-    if not found:
-        pytest.skip("Food menu card not visible")
-
     page = driver.page_source
 
-    assert any(term in page for term in search_terms), "Food menu content not found"
+    assert (
+        found or any(term in page for term in search_terms)
+    ), "Food menu card not visible"
 
     print("FOOD MENU PASSED")

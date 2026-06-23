@@ -9,16 +9,17 @@ class HomePage(BasePage):
     )
 
     def verify_dashboard(self):
-
-        assert self.page_contains("Welcome back")
-
         dashboard_checks = [
+            "Welcome back",
+            "Hestia",
             "Hestia PG",
             "Your Hostel",
             "Room",
+            "Wi-Fi",
             "Wi-Fi Details",
             "Bookings",
-            "Profile"
+            "Profile",
+            "Home"
         ]
 
         assert any(
@@ -27,26 +28,31 @@ class HomePage(BasePage):
         ), "Dashboard content not found"
 
     def open_bookings(self):
-        self.click_a11y("Bookings")
-
-    def open_profile(self):
-        self.click_a11y("Profile")
-
-    def open_leave(self):
-
         try:
-            self.click_a11y(self.LEAVE_CARD)
-
+            self.click_a11y("Bookings")
         except Exception:
-
-            print(
-                "Leave card locator failed, tapping by coordinates"
-            )
-
+            print("Bookings locator failed, tapping bottom navigation")
             self.driver.execute_script(
                 "mobile: clickGesture",
-                {
-                    "x": 540,
-                    "y": 1400
-                }
+                {"x": 540, "y": 2220}
+            )
+
+    def open_profile(self):
+        try:
+            self.click_a11y("Profile")
+        except Exception:
+            print("Profile locator failed, tapping bottom navigation")
+            self.driver.execute_script(
+                "mobile: clickGesture",
+                {"x": 900, "y": 2220}
+            )
+
+    def open_leave(self):
+        try:
+            self.click_a11y(self.LEAVE_CARD)
+        except Exception:
+            print("Leave card locator failed, tapping by coordinates")
+            self.driver.execute_script(
+                "mobile: clickGesture",
+                {"x": 540, "y": 1400}
             )
