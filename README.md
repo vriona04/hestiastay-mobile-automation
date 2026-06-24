@@ -247,3 +247,5 @@ screenshots/
 GitHub Repository:
 
 https://github.com/vriona04/hestiastay-mobile-automation
+
+Last CI/CD update: Jenkins pipeline auto-trigger configured.
