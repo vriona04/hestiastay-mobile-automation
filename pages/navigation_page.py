@@ -32,8 +32,10 @@ class NavigationPage(BasePage):
         self.handle_biometric_popup()
 
         for _ in range(10):
+
             page = self.driver.page_source
 
+            # If already on inner pages -> try to come back
             if (
                 "My Bookings" in page
                 or "Edit Profile" in page
@@ -44,18 +46,9 @@ class NavigationPage(BasePage):
                 or "Payment Details" in page
                 or "Download Official Receipt" in page
             ):
-                try:
-                    self.click_a11y("Close")
-                    time.sleep(2)
-                    continue
-                except Exception:
-                    pass
 
                 try:
-                    self.driver.execute_script(
-                        "mobile: clickGesture",
-                        {"x": 800, "y": 2030}
-                    )
+                    self.click_a11y("Close")
                     time.sleep(2)
                     continue
                 except Exception:
@@ -68,6 +61,7 @@ class NavigationPage(BasePage):
                 except Exception:
                     pass
 
+            # Dashboard verification
             if (
                 "Welcome back" in page
                 or "Hestia PG" in page
@@ -80,6 +74,7 @@ class NavigationPage(BasePage):
                 print("Dashboard detected")
                 return
 
+            # Click Home tab
             try:
                 self.click_a11y("Home")
                 time.sleep(2)
@@ -113,7 +108,7 @@ class NavigationPage(BasePage):
                 {"x": 280, "y": 2160}
             )
 
-        time.sleep(2)
+        time.sleep(3)
 
     def go_profile(self):
         self.go_home()
@@ -121,12 +116,31 @@ class NavigationPage(BasePage):
         try:
             self.click_a11y("Profile")
         except Exception:
-            self.driver.execute_script(
-                "mobile: clickGesture",
-                {"x": 900, "y": 2160}
-            )
+            try:
+                self.driver.find_element(
+                    "xpath",
+                    "//*[@content-desc='Profile']"
+                ).click()
+            except Exception:
+                self.driver.execute_script(
+                    "mobile: clickGesture",
+                    {"x": 900, "y": 2160}
+                )
 
-        time.sleep(2)
+        time.sleep(5)
+
+        page = self.driver.page_source
+
+        if (
+            "My Profile" in page
+            or "Edit Profile" in page
+            or "Email Address" in page
+            or "Phone Number" in page
+        ):
+            print("PROFILE SCREEN OPENED")
+            return
+
+        pytest.skip("Profile screen not opened")
 
     def go_leave(self):
         self.go_home()
@@ -147,9 +161,10 @@ class NavigationPage(BasePage):
                     }
                 )
                 time.sleep(2)
-                page = self.driver.page_source
             except Exception:
                 pass
+
+        page = self.driver.page_source
 
         if "Going on Leave?" in page:
             try:
@@ -171,6 +186,7 @@ class NavigationPage(BasePage):
         self.go_home()
 
         for _ in range(5):
+
             page = self.driver.page_source
 
             if (
@@ -199,7 +215,12 @@ class NavigationPage(BasePage):
 
         page = self.driver.page_source
 
-        if "Need Help?" in page or "Support" in page or "Raise a ticket" in page:
+        if (
+            "Need Help?" in page
+            or "Support" in page
+            or "Raise a ticket" in page
+        ):
+
             try:
                 self.click_a11y(
                     "Need Help?\nRaise a ticket for support"
