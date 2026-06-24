@@ -41,16 +41,17 @@ pipeline {
     }
 
     post {
-    always {
-        publishHTML([
-            allowMissing: true,
-            alwaysLinkToLastBuild: true,
-            keepAll: true,
-            reportDir: 'reports',
-            reportFiles: 'jenkins_report.html',
-            reportName: 'HestiaStay Automation Report'
-        ])
+        always {
+            publishHTML([
+                allowMissing: true,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'reports',
+                reportFiles: 'jenkins_report.html',
+                reportName: 'HestiaStay Automation Report'
+            ])
 
-        archiveArtifacts artifacts: 'screenshots/**/*', fingerprint: true
+            archiveArtifacts artifacts: 'screenshots/**/*', fingerprint: true
+        }
     }
 }
