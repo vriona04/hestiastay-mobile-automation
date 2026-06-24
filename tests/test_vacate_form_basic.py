@@ -1,16 +1,14 @@
 import time
-import pytest
 from pages.navigation_page import NavigationPage
 
 
-def test_vacate_form_basic(logged_in_driver):
-    driver = logged_in_driver
-
+def test_vacate_form_basic(driver):
     time.sleep(5)
 
     nav = NavigationPage(driver)
     nav.go_vacate()
 
+    time.sleep(5)
     page = driver.page_source
 
     assert (
