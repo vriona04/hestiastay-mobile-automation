@@ -3,7 +3,6 @@ from appium.options.android import UiAutomator2Options
 
 
 def get_driver():
-
     options = UiAutomator2Options()
 
     options.platform_name = "Android"
@@ -17,12 +16,11 @@ def get_driver():
     options.set_capability("fullReset", False)
     options.set_capability("dontStopAppOnReset", True)
     options.set_capability("autoGrantPermissions", True)
-    options.set_capability("newCommandTimeout", 300)
 
-    options.set_capability(
-    "uiautomator2ServerLaunchTimeout",
-    60000
-)
+    options.set_capability("newCommandTimeout", 300)
+    options.set_capability("uiautomator2ServerLaunchTimeout", 120000)
+    options.set_capability("uiautomator2ServerInstallTimeout", 120000)
+    options.set_capability("adbExecTimeout", 120000)
 
     driver = webdriver.Remote(
         "http://127.0.0.1:4723",
