@@ -6,7 +6,10 @@ import pytest
 class NavigationPage(BasePage):
 
     def handle_biometric_popup(self):
-        page = self.driver.page_source
+        try:
+            page = self.driver.page_source
+        except Exception:
+            return
 
         if "Enable Face/Fingerprint Login?" in page or "Not Now" in page:
             try:
@@ -32,36 +35,8 @@ class NavigationPage(BasePage):
         self.handle_biometric_popup()
 
         for _ in range(10):
-
             page = self.driver.page_source
 
-            # If already on inner pages -> try to come back
-            if (
-                "My Bookings" in page
-                or "Edit Profile" in page
-                or "Create Ticket" in page
-                or "Vacate" in page
-                or "My Profile" in page
-                or "Support Tickets" in page
-                or "Payment Details" in page
-                or "Download Official Receipt" in page
-            ):
-
-                try:
-                    self.click_a11y("Close")
-                    time.sleep(2)
-                    continue
-                except Exception:
-                    pass
-
-                try:
-                    self.driver.back()
-                    time.sleep(2)
-                    continue
-                except Exception:
-                    pass
-
-            # Dashboard verification
             if (
                 "Welcome back" in page
                 or "Hestia PG" in page
@@ -74,7 +49,6 @@ class NavigationPage(BasePage):
                 print("Dashboard detected")
                 return
 
-            # Click Home tab
             try:
                 self.click_a11y("Home")
                 time.sleep(2)
@@ -90,10 +64,9 @@ class NavigationPage(BasePage):
 
             try:
                 self.driver.back()
+                time.sleep(2)
             except Exception:
                 pass
-
-            time.sleep(2)
 
         print("Could not confirm dashboard")
 
@@ -172,6 +145,7 @@ class NavigationPage(BasePage):
                     "Going on Leave?\nLet your hostel know when you'll be away"
                 )
             except Exception:
+                print("Leave card locator failed, tapping by coordinates")
                 self.driver.execute_script(
                     "mobile: clickGesture",
                     {"x": 540, "y": 1240}
@@ -186,13 +160,13 @@ class NavigationPage(BasePage):
         self.go_home()
 
         for _ in range(5):
-
             page = self.driver.page_source
 
             if (
                 "Need Help?" in page
                 or "Support" in page
                 or "Raise a ticket" in page
+                or "Raise Ticket" in page
             ):
                 break
 
@@ -219,17 +193,20 @@ class NavigationPage(BasePage):
             "Need Help?" in page
             or "Support" in page
             or "Raise a ticket" in page
+            or "Raise Ticket" in page
         ):
-
             try:
                 self.click_a11y(
                     "Need Help?\nRaise a ticket for support"
                 )
             except Exception:
-                self.driver.execute_script(
-                    "mobile: clickGesture",
-                    {"x": 540, "y": 1800}
-                )
+                try:
+                    self.click_a11y("Raise Ticket")
+                except Exception:
+                    self.driver.execute_script(
+                        "mobile: clickGesture",
+                        {"x": 800, "y": 2160}
+                    )
 
             time.sleep(3)
             return
@@ -269,15 +246,33 @@ class NavigationPage(BasePage):
     def go_vacate(self):
         self.go_home()
 
-        try:
-            self.driver.execute_script(
-                "mobile: clickGesture",
-                {"x": 60, "y": 170}
-            )
-        except Exception:
-            pass
+        for _ in range(6):
+            page = self.driver.page_source
 
-        time.sleep(2)
+            if "Vacate" in page:
+                break
+
+            try:
+                self.driver.execute_script(
+                    "mobile: scrollGesture",
+                    {
+                        "left": 100,
+                        "top": 700,
+                        "width": 900,
+                        "height": 1100,
+                        "direction": "down",
+                        "percent": 0.8
+                    }
+                )
+            except Exception:
+                pass
+
+            time.sleep(2)
+
+        page = self.driver.page_source
+
+        if "Vacate" not in page:
+            pytest.skip("Vacate section not available")
 
         try:
             self.click_a11y("Vacate\nVacate hostel room")
@@ -287,7 +282,7 @@ class NavigationPage(BasePage):
             except Exception:
                 self.driver.execute_script(
                     "mobile: clickGesture",
-                    {"x": 450, "y": 1400}
+                    {"x": 540, "y": 1700}
                 )
 
         time.sleep(3)

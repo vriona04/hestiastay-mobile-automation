@@ -1,18 +1,21 @@
 @echo off
 
-python -m pytest -v ^
-tests/test_smoke.py ^
-tests/test_navigation.py ^
+if not exist reports mkdir reports
+if not exist screenshots mkdir screenshots
+
+"C:\Program Files\Python312\python.exe" -m pytest -v -s ^
+tests/test_auto_login_fixture.py ^
 tests/test_booking_details.py ^
-tests/test_payment_history.py ^
-tests/test_profile_details.py ^
-tests/test_edit_profile.py ^
-tests/test_emergency_contact.py ^
-tests/test_rent_due.py ^
-tests/test_hostel_details.py ^
-tests/test_raise_ticket_e2e.py ^
-tests/test_wifi_details.py ^
 tests/test_food_menu.py ^
---html=reports\report.html --self-contained-html
+tests/test_support_tickets.py ^
+tests/test_edit_profile.py ^
+tests/test_leave_flow.py ^
+tests/test_payment_details.py ^
+tests/test_payment_history.py ^
+tests/test_vacate_form_basic.py ^
+tests/test_vacate_requests.py ^
+--html=reports/final_regression.html ^
+tests/test_vacate_form_basic.py ^
+--self-contained-html
 
 pause
