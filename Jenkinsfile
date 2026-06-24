@@ -16,44 +16,50 @@ pipeline {
                 bat '''
                 "C:\\Users\\ajayk\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe" shell am force-stop com.hostelrs.guest
 
-ping 127.0.0.1 -n 6 > nul
+                ping 127.0.0.1 -n 6 > nul
 
-"C:\\Users\\ajayk\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe" shell monkey -p com.hostelrs.guest -c android.intent.category.LAUNCHER 1
+                "C:\\Users\\ajayk\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe" shell monkey -p com.hostelrs.guest -c android.intent.category.LAUNCHER 1
 
-ping 127.0.0.1 -n 11 > nul
+                ping 127.0.0.1 -n 11 > nul
                 '''
             }
         }
 
-        stage('Run Automation Tests') {
+        stage('Run Full Regression Suite') {
             steps {
                 bat '''
-                if not exist reports mkdir reports
-                if not exist screenshots mkdir screenshots
-
-                "C:\\Program Files\\Python312\\python.exe" -m pytest -v -s ^
-                tests/test_auto_login_fixture.py ^
-                tests/test_booking_details.py ^
-                tests/test_food_menu.py ^
-                tests/test_support_tickets.py ^
-                --html=reports/jenkins_report.html --self-contained-html
+                call run_regression.bat
                 '''
             }
         }
     }
 
     post {
+
         always {
+
             publishHTML([
                 allowMissing: true,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
                 reportDir: 'reports',
-                reportFiles: 'jenkins_report.html',
+                reportFiles: 'final_regression.html',
                 reportName: 'HestiaStay Automation Report'
             ])
 
-            archiveArtifacts artifacts: 'screenshots/**/*', fingerprint: true
+            archiveArtifacts(
+                artifacts: 'screenshots/**/*',
+                fingerprint: true,
+                allowEmptyArchive: true
+            )
+        }
+
+        success {
+            echo 'Regression Suite Passed Successfully'
+        }
+
+        failure {
+            echo 'Regression Suite Failed'
         }
     }
 }
