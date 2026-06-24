@@ -14,11 +14,13 @@ pipeline {
         stage('Prepare Device') {
             steps {
                 bat '''
-                adb shell am force-stop com.hostelrs.guest
-                timeout /t 5
+                "C:\\Users\\ajayk\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe" shell am force-stop com.hostelrs.guest
 
-                adb shell monkey -p com.hostelrs.guest -c android.intent.category.LAUNCHER 1
-                timeout /t 10
+ping 127.0.0.1 -n 6 > nul
+
+"C:\\Users\\ajayk\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe" shell monkey -p com.hostelrs.guest -c android.intent.category.LAUNCHER 1
+
+ping 127.0.0.1 -n 11 > nul
                 '''
             }
         }
