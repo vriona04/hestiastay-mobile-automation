@@ -3,9 +3,11 @@ from pages.navigation_page import NavigationPage
 
 
 def test_edit_profile_screen(driver):
+
     time.sleep(5)
 
     nav = NavigationPage(driver)
+
     nav.go_profile()
     time.sleep(3)
 

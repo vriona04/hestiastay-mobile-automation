@@ -15,12 +15,22 @@ def test_raise_ticket_e2e(driver):
 
     page = driver.page_source
 
-    if "Raise Ticket" in page:
-        driver.find_element(
-            "xpath",
-            "//*[contains(@content-desc,'Raise Ticket')]"
-        ).click()
-        time.sleep(3)
+    if "Create Ticket" not in page:
+        try:
+            if "Raise Ticket" in page:
+                driver.find_element(
+                    "xpath",
+                    "//*[contains(@content-desc,'Raise Ticket')]"
+                ).click()
+                time.sleep(3)
+            else:
+                driver.execute_script(
+                    "mobile: clickGesture",
+                    {"x": 900, "y": 180}
+                )
+                time.sleep(3)
+        except Exception:
+            pass
 
     page = driver.page_source
 

@@ -7,7 +7,12 @@ class ProfileDetailsPage(BasePage):
         page = self.driver.page_source
 
         assert (
-            "Profile" in page
-            or "mounika Reddy" in page
-            or "Room 105" in page
+            "My Profile" in page
+            or "Edit Profile" in page
+            or "Personal Information" in page
+            or "Email Address" in page
+            or "Phone Number" in page
+            or "Profile" in page
         ), "Profile screen not found"
+
+        print("PROFILE DETAILS PAGE VERIFIED")

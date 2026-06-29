@@ -12,30 +12,32 @@ def test_hostel_details(driver):
     nav.go_home()
     time.sleep(2)
 
-    # Try to move dashboard to useful home content
-    for _ in range(2):
+    for _ in range(3):
         page = driver.page_source
 
         if (
             "Your Hostel" in page
             or "Hestia PG" in page
-            or "Room 105" in page
+            or "Room" in page
             or "RENT OVERDUE" in page
             or "Need Help?" in page
         ):
             break
 
-        driver.execute_script(
-            "mobile: scrollGesture",
-            {
-                "left": 100,
-                "top": 600,
-                "width": 900,
-                "height": 1200,
-                "direction": "up",
-                "percent": 0.6
-            }
-        )
+        try:
+            driver.execute_script(
+                "mobile: scrollGesture",
+                {
+                    "left": 100,
+                    "top": 600,
+                    "width": 900,
+                    "height": 1200,
+                    "direction": "up",
+                    "percent": 0.6
+                }
+            )
+        except Exception:
+            pass
 
         time.sleep(2)
 
