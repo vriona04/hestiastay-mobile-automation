@@ -1,12 +1,9 @@
 import time
-import pytest
 from pages.navigation_page import NavigationPage
 from pages.profile_details_page import ProfileDetailsPage
 
 
-def test_profile_details(logged_in_driver):
-    driver = logged_in_driver
-
+def test_profile_details(driver):
     time.sleep(5)
 
     nav = NavigationPage(driver)
