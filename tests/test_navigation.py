@@ -1,13 +1,12 @@
 import time
-import pytest
-
 from pages.navigation_page import NavigationPage
 
 
-def test_navigation(logged_in_driver):
-    driver = logged_in_driver
+def test_navigation(driver):
+
     nav = NavigationPage(driver)
 
+    # Verify Dashboard
     nav.go_home()
     time.sleep(2)
 
@@ -22,8 +21,11 @@ def test_navigation(logged_in_driver):
         or "Going on Leave?" in page
     ), "Dashboard not found"
 
+    print("Dashboard navigation verified")
+
+    # Verify Bookings
     nav.go_bookings()
-    time.sleep(2)
+    time.sleep(3)
 
     page = driver.page_source
 
@@ -35,31 +37,31 @@ def test_navigation(logged_in_driver):
         or "SLN PG" in page
     ), "Bookings screen not found"
 
+    print("Bookings navigation verified")
+
+    # Return to Dashboard first
     try:
-        nav.go_profile()
+        driver.back()
         time.sleep(2)
-
-        page = driver.page_source
-
-        if (
-            "My Profile" in page
-            or "Profile" in page
-            or "Edit Profile" in page
-            or "Email Address" in page
-            or "Phone Number" in page
-        ):
-            print("Profile navigation verified")
-        else:
-            driver.back()
-            time.sleep(2)
-            pytest.skip("Profile navigation not available from current screen")
-
     except Exception:
-        try:
-            driver.back()
-            time.sleep(2)
-        except Exception:
-            pass
-        pytest.skip("Profile navigation skipped")
+        pass
 
+    nav.go_home()
+    time.sleep(2)
+
+    # Open Profile directly from Dashboard
+    nav.go_profile()
+    time.sleep(5)
+
+    page = driver.page_source
+
+    assert (
+        "My Profile" in page
+        or "Edit Profile" in page
+        or "Email Address" in page
+        or "Phone Number" in page
+        or "Personal Information" in page
+    ), "Profile screen not found"
+
+    print("Profile navigation verified")
     print("NAVIGATION PASSED")
