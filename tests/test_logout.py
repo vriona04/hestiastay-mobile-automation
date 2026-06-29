@@ -1,74 +1,50 @@
 import time
-import pytest
 from appium.webdriver.common.appiumby import AppiumBy
 
 
-@pytest.mark.auth
 def test_logout(driver):
 
     time.sleep(5)
 
-    # Click top-right avatar/menu button
-    try:
-        menu_btn = driver.find_element(
-            AppiumBy.XPATH,
-            "//android.widget.Button[@clickable='true']"
-        )
-
-        menu_btn.click()
-        print("Profile menu clicked")
-
-    except Exception:
-        pytest.skip("Profile menu button not found")
-
-    time.sleep(3)
-
     page = driver.page_source
 
-    # Save XML for debugging
-    with open(
-        "screenshots/logout_after_menu.xml",
-        "w",
-        encoding="utf-8"
-    ) as f:
-        f.write(page)
-
-    if "Logout" not in page and "Sign out" not in page:
-        pytest.skip("Logout option not visible")
-
-    try:
-        driver.find_element(
-            AppiumBy.XPATH,
-            "//*[contains(@content-desc,'Logout') "
-            "or contains(@content-desc,'Sign out')]"
-        ).click()
-
-    except Exception:
-        pytest.skip("Logout button locator needs update")
-
-    time.sleep(3)
-
-    page = driver.page_source
-
-    if "Confirm" in page or "Are you sure" in page:
+    # Open side/profile menu if Logout is not already visible
+    if "Logout" not in page:
         try:
             driver.find_element(
                 AppiumBy.XPATH,
-                "//*[contains(@content-desc,'Confirm') "
-                "or contains(@content-desc,'Logout')]"
+                "//*[contains(@content-desc,'Profile')]"
             ).click()
+            print("Profile menu clicked")
         except Exception:
-            pass
+            driver.execute_script(
+                "mobile: clickGesture",
+                {"x": 90, "y": 170}
+            )
+            print("Profile menu tapped by coordinates")
 
-    time.sleep(5)
+        time.sleep(3)
+        page = driver.page_source
 
-    page = driver.page_source
+    assert "Logout" in page, "Logout option not visible"
 
-    assert (
-        "Sign In" in page
-        or "Login" in page
-        or "Email" in page
-        or "Password" in page
-    ), "Logout failed"
+    # Click Logout
+    driver.find_element(
+        AppiumBy.XPATH,
+        "//*[contains(@content-desc,'Logout')]"
+    ).click()
 
-    print("LOGOUT PASSED")
+    time.sleep(3)
+
+    # Save confirmation dialog XML
+    with open(
+        "screenshots/logout_confirmation.xml",
+        "w",
+        encoding="utf-8"
+    ) as f:
+        f.write(driver.page_source)
+
+    print("Logout confirmation XML saved")
+
+    # Stop here intentionally so we can inspect confirmation popup
+    assert False, "Debug stop: inspect logout_confirmation.xml"
