@@ -1,20 +1,28 @@
-# HestiaStay Mobile Automation Framework
+# 🏠 HestiaStay Mobile Automation Framework
 
-![Python](https://img.shields.io/badge/Python-3.12-blue)
-![Appium](https://img.shields.io/badge/Appium-3.5-green)
-![Pytest](https://img.shields.io/badge/Pytest-Automation-orange)
-![Jenkins](https://img.shields.io/badge/Jenkins-CI%2FCD-red)
-![Platform](https://img.shields.io/badge/Platform-Android-success)
 
-## Overview
 
-A robust and scalable mobile automation framework for the HestiaStay Android application built using Python, Appium, and Pytest following the Page Object Model (POM) design pattern.
 
-The framework supports real Android device execution, end-to-end business workflow automation, HTML reporting, failure evidence collection, and Jenkins CI/CD integration.
+\
 
 ---
 
-## Tech Stack
+## 📌 Overview
+
+A robust and scalable mobile automation framework for the **HestiaStay Android application** built using **Python, Appium, and Pytest** following the **Page Object Model (POM)** design pattern.
+
+The framework supports:
+
+* Real Android device execution
+* End-to-End business workflow automation
+* Stable regression execution
+* HTML reporting
+* Failure evidence collection
+* Jenkins CI/CD integration
+
+---
+
+## 🚀 Tech Stack
 
 * Python 3.12
 * Appium 3.5
@@ -26,7 +34,7 @@ The framework supports real Android device execution, end-to-end business workfl
 
 ---
 
-## Key Features
+## ⭐ Key Features
 
 * Android mobile automation
 * Real device execution
@@ -43,47 +51,76 @@ The framework supports real Android device execution, end-to-end business workfl
 
 ---
 
-## Test Coverage
+## 🧪 Test Coverage
 
-### Core Regression Suite
+### Authentication
 
+* Login
+* Invalid Login
+* Logout
+
+### Dashboard
+
+* Auto Login Validation
 * Smoke Test
 * Navigation Test
-* Booking Details
 * Food Menu
-* Rent Due
 * Wi-Fi Details
 * Hostel Details
-* Payment History
+* Rent Due
+
+### Profile
+
 * Profile Details
 * Edit Profile
 * Emergency Contact
-* Support Tickets
 
-### End-to-End Business Flows
+### Booking
 
+* Booking Details
+
+### Leave Module
+
+* Leave Screen
 * Leave Flow
+* Leave Request End-to-End
+* Leave Return
+
+### Payment Module
+
+* Payment Details
+* Payment History
+* Rent Due Validation
+
+### Support Module
+
+* Support Tickets
 * Raise Ticket Form
 * Raise Ticket End-to-End
+
+### Vacate Module
+
+* Vacate Screen
 * Vacate Form
 * Vacate Requests
 
 ---
 
-## Latest Regression Results
+## 📊 Latest Regression Results
 
-| Metric      | Result |
-| ----------- | ------ |
-| Total Tests | 16+    |
-| Passed      | 16     |
-| Failed      | 0      |
-| Skipped     | 0      |
+| Metric                  | Result |
+| ----------------------- | ------ |
+| Total Automated Tests   | 26     |
+| Stable Regression Tests | 24     |
+| Passed                  | 24     |
+| Failed                  | 0      |
+| Skipped                 | 0      |
 
-**Execution Time:** ~5 Minutes
+**Execution Time:** ~15 Minutes
 
 ---
 
-## Framework Architecture
+## 🏗 Framework Architecture
 
 ```text
 hestiastay_automation/
@@ -93,12 +130,13 @@ hestiastay_automation/
 │   ├── navigation_page.py
 │   ├── bookings_page.py
 │   ├── profile_page.py
+│   ├── leave_page.py
 │   └── ...
 │
 ├── tests/
 │   ├── test_smoke.py
 │   ├── test_booking_details.py
-│   ├── test_food_menu.py
+│   ├── test_leave_flow.py
 │   └── ...
 │
 ├── utils/
@@ -118,7 +156,62 @@ hestiastay_automation/
 
 ---
 
-## Installation
+## 📂 Project Structure
+
+### pages/
+
+Contains all Page Object classes.
+
+Examples:
+
+* HomePage
+* NavigationPage
+* BookingsPage
+* ProfilePage
+* LeavePage
+* RaiseTicketPage
+
+Responsibilities:
+
+* UI interactions
+* Element locators
+* Screen-level actions
+
+---
+
+### tests/
+
+Contains all automated test scenarios.
+
+Examples:
+
+* test_smoke.py
+* test_booking_details.py
+* test_leave_flow.py
+* test_payment_details.py
+
+Responsibilities:
+
+* Functional testing
+* Regression testing
+* End-to-End testing
+
+---
+
+### utils/
+
+Contains reusable framework utilities.
+
+Examples:
+
+* Driver Factory
+* Base Page
+* Common Utilities
+* Wait Methods
+
+---
+
+## ⚙️ Installation
 
 ### Clone Repository
 
@@ -128,19 +221,43 @@ git clone https://github.com/vriona04/hestiastay-mobile-automation.git
 cd hestiastay-mobile-automation
 ```
 
+### Create Virtual Environment
+
+```bash
+python -m venv venv
+```
+
+### Activate Virtual Environment
+
+#### Windows
+
+```bash
+venv\Scripts\activate
+```
+
 ### Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Start Appium Server
+---
+
+## 📱 Device Setup
+
+Connect Android device:
+
+```bash
+adb devices
+```
+
+Start Appium Server:
 
 ```bash
 appium
 ```
 
-### Verify Connected Device
+Verify connected devices:
 
 ```bash
 adb devices
@@ -148,23 +265,39 @@ adb devices
 
 ---
 
-## Execute Regression Suite
+## ▶️ Running Tests
+
+### Run Single Test
 
 ```bash
-python -m pytest -m stable \
---html=reports/report.html \
---self-contained-html
+python -m pytest -v -s tests/test_booking_details.py
 ```
 
-or
+### Run Full Regression
 
 ```bash
 .\run_regression.bat
 ```
 
+### Generate HTML Report
+
+```bash
+python -m pytest --html=reports/report.html --self-contained-html
+```
+
 ---
 
-## Jenkins CI/CD Pipeline
+## 📄 Sample Regression Command
+
+```bash
+python -m pytest -v -s tests/ ^
+--html=reports/final_regression.html ^
+--self-contained-html
+```
+
+---
+
+## 🔄 Jenkins CI/CD Pipeline
 
 The framework is integrated with Jenkins for Continuous Integration.
 
@@ -195,7 +328,7 @@ Archive Artifacts
 
 ---
 
-## Reports
+## 📊 Reports
 
 HTML reports are automatically generated under:
 
@@ -211,20 +344,27 @@ screenshots/
 
 ---
 
-## Framework Highlights
+## 🌟 Framework Highlights
 
-* Page Object Model Architecture
-* Reusable Navigation Framework
-* Stable Regression Execution
-* Real Device Testing
-* Jenkins CI/CD Integration
-* Detailed HTML Reports
-* Automatic Failure Evidence Collection
-* GitHub Version Control
+✅ Page Object Model Architecture
+
+✅ Reusable Navigation Framework
+
+✅ Stable Regression Execution
+
+✅ Real Device Testing
+
+✅ Jenkins CI/CD Integration
+
+✅ Detailed HTML Reports
+
+✅ Automatic Failure Evidence Collection
+
+✅ GitHub Version Control
 
 ---
 
-## Project Status
+## 📈 Project Status
 
 ✅ Active Development
 
@@ -242,10 +382,22 @@ screenshots/
 
 ---
 
-## Repository
+## 🔗 Repository
 
 GitHub Repository:
 
 https://github.com/vriona04/hestiastay-mobile-automation
 
-Last CI/CD update: Jenkins pipeline auto-trigger configured.
+---
+
+## 👨‍💻 Author
+
+**Mounika**
+
+Automation Test Engineer
+
+---
+
+## 📄 License
+
+This project is developed for **HestiaStay internal quality assurance and automation purposes**.
